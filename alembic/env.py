@@ -7,8 +7,9 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# Add backend directory to sys.path
-sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
+# Add project root directory to sys.path
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 
 from app.database import Base, DATABASE_URL
 from app import models  # noqa: F401
