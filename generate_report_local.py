@@ -7,13 +7,14 @@ from dotenv import load_dotenv
 from fpdf import FPDF
 
 def main():
-    parser = argparse.ArgumentParser(description="Generate Monthly Payment & Member Details PDF Report locally.")
+    parser = argparse.ArgumentParser(description="Generate Monthly Payment & Member Details PDF Report.")
     parser.add_argument("--year", type=int, default=2026, help="The year for the report (default: 2026)")
-    parser.add_argument("--outdir", type=str, default="pdf", help="The output directory for the PDF (default: pdf)")
+    parser.add_argument("--outdir", type=str, default=None, help="Output directory path (defaults to backend/reports)")
     args = parser.parse_args()
 
-    # Load env variables from backend/.env
-    env_path = os.path.join(os.path.dirname(__file__), "backend", ".env")
+    # Load env variables from current directory (.env)
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    env_path = os.path.join(base_dir, ".env")
     if os.path.exists(env_path):
         load_dotenv(env_path)
     else:
@@ -21,7 +22,7 @@ def main():
 
     database_url = os.environ.get("DATABASE_URL")
     if not database_url:
-        print("Error: DATABASE_URL not found in environment or backend/.env file.")
+        print("Error: DATABASE_URL not found in environment or .env file.")
         sys.exit(1)
 
     print(f"Connecting to database...")
@@ -32,7 +33,7 @@ def main():
         db = client["residance_db"]
 
     year = args.year
-    outdir = args.outdir
+    outdir = args.outdir or os.path.join(base_dir, "pdf")
 
     # Create output directory
     os.makedirs(outdir, exist_ok=True)
