@@ -10,7 +10,6 @@ load_dotenv()
 # Add project root directory to sys.path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-
 from app.database import Base, DATABASE_URL
 from app import models  # noqa: F401
 
@@ -22,9 +21,17 @@ if config.config_file_name is not None:
 target_metadata = Base.metadata
 
 
+def get_sync_url() -> str:
+    """Ensure Alembic uses synchronous pymysql driver even if DATABASE_URL is set to asyncmy."""
+    url = os.environ.get("DATABASE_URL", DATABASE_URL)
+    if url and "mysql+asyncmy://" in url:
+        url = url.replace("mysql+asyncmy://", "mysql+pymysql://")
+    return url
+
+
 def run_migrations_offline() -> None:
     """Run migrations in 'offline' mode."""
-    url = os.environ.get("DATABASE_URL", DATABASE_URL)
+    url = get_sync_url()
     context.configure(
         url=url,
         target_metadata=target_metadata,
@@ -39,7 +46,7 @@ def run_migrations_offline() -> None:
 def run_migrations_online() -> None:
     """Run migrations in 'online' mode."""
     configuration = config.get_section(config.config_ini_section)
-    db_url = os.environ.get("DATABASE_URL", DATABASE_URL)
+    db_url = get_sync_url()
     configuration["sqlalchemy.url"] = db_url
 
     connectable = engine_from_config(
