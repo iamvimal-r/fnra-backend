@@ -1,0 +1,4 @@
+This folder will contain the generated monthly reports.
+
+Run the local generator script to compile and save the PDF here:
+python3 generate_report_local.py --year 2026

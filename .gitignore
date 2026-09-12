@@ -1,0 +1,63 @@
+# Node.js / React Native / Expo
+node_modules/
+npm-debug.log
+yarn-error.log
+.expo/
+dist/
+build/
+.next/
+*.tsbuildinfo
+
+# Python / FastAPI
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+venv/
+.venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# IDEs and Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Docker and Databases
+mysql/
+db_data/
+*.rdb
+*.sqlite3
+
+# Logs
+logs/
+*.log

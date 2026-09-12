@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend
+    container_name: residance_backend
+    ports:
+      - "8082:8000"
+    environment:
+      - DB_HOST=pressclub_db
+      - DB_PORT=3306
+      - DB_USERNAME=root
+      - DB_PASSWORD=root
+      - DB_NAME=fnra_db
+      - DATABASE_URL=mysql+pymysql://root:root@pressclub_db:3306/fnra_db
+      - SECRET_KEY=my-super-secret-jwt-key-change-in-production-32chars
+      - ACCESS_TOKEN_EXPIRE_MINUTES=60
+      - REFRESH_TOKEN_EXPIRE_DAYS=7
+    volumes:
+      - ./backend:/app
+    restart: always
+    networks:
+      - tvm-press-club-backend_default
+
+  frontend:
+    build: ../residance/frontend
+    container_name: residance_frontend
+    ports:
+      - "8081:8081"
+    depends_on:
+      - backend
+    environment:
+      - EXPO_PUBLIC_BACKEND_URL=https://fnra.onrender.com
+    volumes:
+      - ../residance/frontend:/app
+      - /app/node_modules
+    restart: always
+    networks:
+      - tvm-press-club-backend_default
+
+networks:
+  tvm-press-club-backend_default:
+    external: true
+
+

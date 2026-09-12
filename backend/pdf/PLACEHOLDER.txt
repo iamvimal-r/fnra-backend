@@ -1,0 +1,4 @@
+This folder will contain the generated monthly reports when running via Docker.
+
+Run the docker command to compile and save the PDF here:
+docker-compose exec backend python generate_report_local.py --year 2026
