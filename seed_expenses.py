@@ -73,7 +73,8 @@ def seed_expenses():
                 count += 1
         
         db.commit()
-        print(f"Successfully seeded {count} mock expenses into MySQL fnra_db!")
+        db_name = engine.url.database or "database"
+        print(f"Successfully seeded {count} mock expenses into MySQL ({db_name})!")
     finally:
         db.close()
 

@@ -13,8 +13,9 @@ Base.metadata.create_all(bind=engine)
 
 def seed():
     db = SessionLocal()
+    db_name = engine.url.database or "database"
     try:
-        print("🌱 Seeding MySQL Database (fnra_db)...")
+        print(f"🌱 Seeding MySQL Database ({db_name})...")
 
         # 1. Users
         if db.query(models.User).count() == 0:
