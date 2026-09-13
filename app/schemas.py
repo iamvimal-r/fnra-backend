@@ -134,6 +134,7 @@ class HouseCreate(BaseModel):
     house_number: str
     block: str
     owner_name: str
+    status: Optional[str] = "Active"
     family_members: List[FamilyMember] = []
 
 

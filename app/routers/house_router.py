@@ -24,7 +24,7 @@ def register_house(
         block=house.block,
         owner_name=house.owner_name,
         family_members=[fm.dict() for fm in house.family_members],
-        status="Active",
+        status=house.status or "Active",
     )
     db.add(new_house)
     db.commit()
@@ -123,6 +123,8 @@ def update_house(
     existing.house_number = house_data.house_number
     existing.block = house_data.block
     existing.owner_name = house_data.owner_name
+    if house_data.status:
+        existing.status = house_data.status
     existing.family_members = [fm.dict() for fm in house_data.family_members]
     db.commit()
     return {"message": "House updated successfully"}
