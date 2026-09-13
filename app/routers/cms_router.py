@@ -34,6 +34,7 @@ async def upload_image(
 class SlideSchema(BaseModel):
     title: str
     subtitle: Optional[str] = None
+    tag: Optional[str] = None
     image_url: str
     link: Optional[str] = None
     order: int = 0
@@ -58,11 +59,17 @@ class GalleryItem(BaseModel):
     title: str
     image_url: str
     category: str = "general"   # general | event | facility | maintenance
+    description: Optional[str] = None
+    alt_text: Optional[str] = None
     order: int = 0
+    active: bool = True
 
 class GalleryResponse(GalleryItem):
     id: str
     created_at: str
+
+class BulkDeleteGalleryRequest(BaseModel):
+    ids: list[str]
 
 # ── Slides ────────────────────────────────────────────────────────────────────
 
@@ -74,6 +81,7 @@ def list_slides(db: Session = Depends(database.get_db)):
             "id": str(s.id),
             "title": s.title,
             "subtitle": s.subtitle,
+            "tag": getattr(s, 'tag', None),
             "image_url": s.image_url,
             "link": s.link,
             "order": s.order,
@@ -87,6 +95,7 @@ def create_slide(data: SlideSchema, db: Session = Depends(database.get_db), curr
     slide = models.Slide(
         title=data.title,
         subtitle=data.subtitle,
+        tag=data.tag,
         image_url=data.image_url,
         link=data.link,
         order=data.order,
@@ -99,6 +108,7 @@ def create_slide(data: SlideSchema, db: Session = Depends(database.get_db), curr
         "id": str(slide.id),
         "title": slide.title,
         "subtitle": slide.subtitle,
+        "tag": getattr(slide, 'tag', None),
         "image_url": slide.image_url,
         "link": slide.link,
         "order": slide.order,
@@ -116,6 +126,8 @@ def update_slide(sid: str, data: SlideSchema, db: Session = Depends(database.get
         raise HTTPException(404, "Slide not found")
     slide.title = data.title
     slide.subtitle = data.subtitle
+    if hasattr(slide, 'tag'):
+        slide.tag = data.tag
     slide.image_url = data.image_url
     slide.link = data.link
     slide.order = data.order
@@ -126,6 +138,7 @@ def update_slide(sid: str, data: SlideSchema, db: Session = Depends(database.get
         "id": str(slide.id),
         "title": slide.title,
         "subtitle": slide.subtitle,
+        "tag": getattr(slide, 'tag', None),
         "image_url": slide.image_url,
         "link": slide.link,
         "order": slide.order,
@@ -240,9 +253,12 @@ def list_gallery(db: Session = Depends(database.get_db)):
             "id": str(g.id),
             "title": g.title,
             "image_url": g.image_url,
-            "category": g.category,
-            "order": g.order,
-            "created_at": g.created_at.isoformat() if g.created_at else datetime.utcnow().isoformat(),
+            "category": g.category or "general",
+            "description": getattr(g, 'description', None),
+            "alt_text": getattr(g, 'alt_text', None),
+            "order": g.order or 0,
+            "active": getattr(g, 'active', True),
+            "created_at": g.created_at.isoformat() if getattr(g, 'created_at', None) else datetime.utcnow().isoformat(),
         }
         for g in gallery_items
     ]
@@ -253,7 +269,10 @@ def create_gallery(data: GalleryItem, db: Session = Depends(database.get_db), cu
         title=data.title,
         image_url=data.image_url,
         category=data.category,
+        description=data.description,
+        alt_text=data.alt_text,
         order=data.order,
+        active=data.active,
         created_at=datetime.utcnow(),
     )
     db.add(item)
@@ -264,7 +283,10 @@ def create_gallery(data: GalleryItem, db: Session = Depends(database.get_db), cu
         "title": item.title,
         "image_url": item.image_url,
         "category": item.category,
+        "description": getattr(item, 'description', None),
+        "alt_text": getattr(item, 'alt_text', None),
         "order": item.order,
+        "active": getattr(item, 'active', True),
         "created_at": item.created_at.isoformat(),
     }
 
@@ -280,6 +302,12 @@ def update_gallery(gid: str, data: GalleryItem, db: Session = Depends(database.g
     item.title = data.title
     item.image_url = data.image_url
     item.category = data.category
+    if hasattr(item, 'description'):
+        item.description = data.description
+    if hasattr(item, 'alt_text'):
+        item.alt_text = data.alt_text
+    if hasattr(item, 'active'):
+        item.active = data.active
     item.order = data.order
     db.commit()
     db.refresh(item)
@@ -288,9 +316,25 @@ def update_gallery(gid: str, data: GalleryItem, db: Session = Depends(database.g
         "title": item.title,
         "image_url": item.image_url,
         "category": item.category,
+        "description": getattr(item, 'description', None),
+        "alt_text": getattr(item, 'alt_text', None),
         "order": item.order,
-        "created_at": item.created_at.isoformat() if item.created_at else datetime.utcnow().isoformat(),
+        "active": getattr(item, 'active', True),
+        "created_at": item.created_at.isoformat() if getattr(item, 'created_at', None) else datetime.utcnow().isoformat(),
     }
+
+@router.delete("/gallery/bulk-delete", status_code=200)
+def bulk_delete_gallery(req: BulkDeleteGalleryRequest, db: Session = Depends(database.get_db), current_user: models.User = Depends(auth.get_current_user)):
+    oids = []
+    for sid in req.ids:
+        try:
+            oids.append(int(sid))
+        except ValueError:
+            pass
+    if oids:
+        db.query(models.Gallery).filter(models.Gallery.id.in_(oids)).delete(synchronize_session=False)
+        db.commit()
+    return {"message": f"Deleted {len(oids)} items"}
 
 @router.delete("/gallery/{gid}", status_code=200)
 def delete_gallery(gid: str, db: Session = Depends(database.get_db), current_user: models.User = Depends(auth.get_current_user)):
@@ -304,3 +348,4 @@ def delete_gallery(gid: str, db: Session = Depends(database.get_db), current_use
     db.delete(item)
     db.commit()
     return {"message": "Deleted"}
+

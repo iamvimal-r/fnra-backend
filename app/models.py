@@ -187,6 +187,7 @@ class Slide(Base):
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String(255), nullable=False)
     subtitle = Column(String(255), nullable=True)
+    tag = Column(String(100), nullable=True)
     image_url = Column(String(500), nullable=False)
     link = Column(String(500), nullable=True)
     order = Column(Integer, default=0)
@@ -212,7 +213,11 @@ class Gallery(Base):
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String(255), nullable=False)
     image_url = Column(String(500), nullable=False)
-    category = Column(String(50), default="general")
+    category = Column(String(100), default="general")
+    description = Column(Text, nullable=True)
+    alt_text = Column(String(255), nullable=True)
     order = Column(Integer, default=0)
+    active = Column(Boolean, default=True)
     created_at = Column(DateTime, default=datetime.utcnow)
+
 
