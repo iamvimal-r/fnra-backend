@@ -45,6 +45,29 @@ def register_house(
     }
 
 
+@router.get("/houses/public", response_model=list[schemas.HouseResponse])
+def get_public_houses(
+    db: Session = Depends(database.get_db),
+):
+    """Public endpoint for retrieving house directory listing (no auth required)."""
+    houses = db.query(models.House).all()
+    result = []
+    for h in houses:
+        result.append({
+            "_id": str(h.id),
+            "house_number": h.house_number,
+            "house_name": getattr(h, "house_name", "") or "",
+            "block": h.block,
+            "owner_name": h.owner_name,
+            "family_members": h.family_members or [],
+            "association_fee": 50.0,
+            "status": h.status,
+            "last_payment_date": None,
+            "last_payment_month": "No payments yet",
+        })
+    return result
+
+
 @router.get("/houses", response_model=list[schemas.HouseResponse])
 def get_all_houses(
     db: Session = Depends(database.get_db),
