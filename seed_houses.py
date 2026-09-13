@@ -107,13 +107,24 @@ HOUSES_DATA = [
     {"house_number": "223", "block": "Block A", "owner_name": "Sudheesh (സുധീഷ്)", "status": "Active"},
     {"house_number": "224", "block": "Block A", "owner_name": "Rajeev (രാജീവ്)", "status": "Active"},
     {"house_number": "225", "block": "Block A", "owner_name": "Vakeel (വക്കീൽ)", "status": "Active"},
+    {"house_number": "226", "block": "Block A", "owner_name": "Sabu (സാബു)", "status": "Active"},
+    {"house_number": "227", "block": "Block A", "owner_name": "Sabu Next (സാബു Next)", "status": "Active"},
+    {"house_number": "228", "block": "Block A", "owner_name": "Jayanthi Amma (ജയന്തി അമ്മ)", "status": "Active"},
+    {"house_number": "229", "block": "Block A", "owner_name": "Vishakh (വിശാഖ്)", "status": "Active"},
+    {"house_number": "230", "block": "Block A", "owner_name": "Kochukuttan (കൊച്ചുകുട്ടൻ)", "status": "Active"},
+    {"house_number": "231", "block": "Block A", "owner_name": "Sajeev (സജീവ്)", "status": "Active"},
+    {"house_number": "232", "block": "Block A", "owner_name": "Raji (രാജി)", "status": "Active"},
+    {"house_number": "233", "block": "Block A", "owner_name": "Kochukuttan Next Home (കൊച്ചുകുട്ടൻ Next Home)", "status": "Active"},
+    {"house_number": "234", "block": "Block A", "owner_name": "Lenin Vilakam (ലെനിൻ വിളാകം)", "status": "Active"},
+    {"house_number": "235", "block": "Block A", "owner_name": "Suresh (സുരേഷ്)", "status": "Active"},
+    {"house_number": "236", "block": "Block A", "owner_name": "Chandran (ചന്ദ്രൻ)", "status": "Active"},
 ]
 
 def seed_houses():
     Base.metadata.create_all(bind=engine)
     db = SessionLocal()
     try:
-        print("🌱 Seeding Houses data (102-170, 201-225) into MySQL...")
+        print("🌱 Seeding Houses data (102-170, 201-236) into MySQL...")
         count_added = 0
         count_updated = 0
 
