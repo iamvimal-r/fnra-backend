@@ -10,6 +10,7 @@ from app.database import engine, SessionLocal, Base
 from app import models
 
 HOUSES_DATA = [
+    # 100 series (Block C / B)
     {"house_number": "102", "block": "Block C", "owner_name": "Anirudhan Vakeel (അനിരുദ്ധൻ വക്കീൽ)", "status": "Active"},
     {"house_number": "103", "block": "Block C", "owner_name": "Aneesh K.G (അനീഷ് K G)", "status": "Active"},
     {"house_number": "104", "block": "Block C", "owner_name": "Sagar (സാഗർ)", "status": "Active"},
@@ -79,18 +80,46 @@ HOUSES_DATA = [
     {"house_number": "168", "block": "Block C", "owner_name": "Anita Auto Driver (അനിത ഓട്ടോ ഡ്രൈവർ)", "status": "Active"},
     {"house_number": "169", "block": "Block C", "owner_name": "Anita (അനിത)", "status": "Active"},
     {"house_number": "170", "block": "Block C", "owner_name": "Anita Opp (അനിത Opp)", "status": "Active"},
+
+    # 200 series (Block A)
+    {"house_number": "201", "block": "Block A", "owner_name": "Sarojam (സരോജം)", "status": "Active"},
+    {"house_number": "202", "block": "Block A", "owner_name": "Ammu (അമ്മു)", "status": "Active"},
+    {"house_number": "203", "block": "Block A", "owner_name": "Lakshmi (ലക്ഷ്മി)", "status": "Active"},
+    {"house_number": "204", "block": "Block A", "owner_name": "Monukuttan (മോനുകുട്ടൻ)", "status": "Active"},
+    {"house_number": "205", "block": "Block A", "owner_name": "Dasi Maman (ദാസി മാമൻ)", "status": "Active"},
+    {"house_number": "206", "block": "Block A", "owner_name": "Santhosh (സന്തോഷ്)", "status": "Active"},
+    {"house_number": "207", "block": "Block A", "owner_name": "Lalitha (ലളിത)", "status": "Active"},
+    {"house_number": "208", "block": "Block A", "owner_name": "Anil (അനിൽ)", "status": "Active"},
+    {"house_number": "209", "block": "Block A", "owner_name": "New Home", "status": "Active"},
+    {"house_number": "210", "block": "Block A", "owner_name": "Madhumohanan (മധുമോഹനൻ)", "status": "Active"},
+    {"house_number": "211", "block": "Block A", "owner_name": "Thankappan (തങ്കപ്പൻ)", "status": "Active"},
+    {"house_number": "212", "block": "Block A", "owner_name": "Chandukuttan (ചന്ദുകുട്ടൻ)", "status": "Active"},
+    {"house_number": "213", "block": "Block A", "owner_name": "Gopu (ഗോപു)", "status": "Active"},
+    {"house_number": "214", "block": "Block A", "owner_name": "Saraswathi Bhavan (സരസ്വതി ഭവൻ)", "status": "Active"},
+    {"house_number": "215", "block": "Block A", "owner_name": "Sudhamma (സുധമ്മ)", "status": "Active"},
+    {"house_number": "216", "block": "Block A", "owner_name": "Preman (പ്രേമൻ)", "status": "Active"},
+    {"house_number": "217", "block": "Block A", "owner_name": "Annam (അന്നം)", "status": "Active"},
+    {"house_number": "218", "block": "Block A", "owner_name": "Shibu (ഷിബു)", "status": "Active"},
+    {"house_number": "219", "block": "Block A", "owner_name": "Nalini Teacher (നളിനി ടീച്ചർ)", "status": "Active"},
+    {"house_number": "220", "block": "Block A", "owner_name": "Rajamma Amma (രാജമ്മ അമ്മ)", "status": "Active"},
+    {"house_number": "221", "block": "Block A", "owner_name": "Chinchu (ചിഞ്ചു)", "status": "Active"},
+    {"house_number": "222", "block": "Block A", "owner_name": "Madhu (മധു)", "status": "Active"},
+    {"house_number": "223", "block": "Block A", "owner_name": "Sudheesh (സുധീഷ്)", "status": "Active"},
+    {"house_number": "224", "block": "Block A", "owner_name": "Rajeev (രാജീവ്)", "status": "Active"},
+    {"house_number": "225", "block": "Block A", "owner_name": "Vakeel (വക്കീൽ)", "status": "Active"},
 ]
 
 def seed_houses():
     Base.metadata.create_all(bind=engine)
     db = SessionLocal()
     try:
-        print("🌱 Seeding Houses data (102-170) into MySQL...")
+        print("🌱 Seeding Houses data (102-170, 201-225) into MySQL...")
         count_added = 0
         count_updated = 0
 
         for item in HOUSES_DATA:
-            existing = db.query(models.House).filter(models.House.house_number == item["house_number"]).first()
+            h_num = item["house_number"].strip()
+            existing = db.query(models.House).filter(models.House.house_number == h_num).first()
             if existing:
                 existing.owner_name = item["owner_name"]
                 existing.block = item["block"]
@@ -98,7 +127,7 @@ def seed_houses():
                 count_updated += 1
             else:
                 house = models.House(
-                    house_number=item["house_number"],
+                    house_number=h_num,
                     block=item["block"],
                     owner_name=item["owner_name"],
                     family_members=[],
