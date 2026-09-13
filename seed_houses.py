@@ -58,13 +58,34 @@ HOUSES_DATA = [
     {"house_number": "147", "block": "Block C", "owner_name": "Anil A Veedu (അനിൽ A വീട്)", "status": "Active"},
     {"house_number": "148", "block": "Block C", "owner_name": "Madhu Auto (മധു ഓട്ടോ)", "status": "NC"},
     {"house_number": "149", "block": "Block C", "owner_name": "Unni Kottaram (ഉണ്ണി കൊട്ടാരം)", "status": "Active"},
+    {"house_number": "150", "block": "Block C", "owner_name": "CRP", "status": "Active"},
+    {"house_number": "151", "block": "Block C", "owner_name": "Anita Veedu (അനിത വീട്)", "status": "Active"},
+    {"house_number": "152", "block": "Block C", "owner_name": "Kamalamma (കമലമ്മ)", "status": "NC"},
+    {"house_number": "153", "block": "Block C", "owner_name": "Binu (ബിനു)", "status": "Active"},
+    {"house_number": "154", "block": "Block C", "owner_name": "Rakesh (രാകേഷ്)", "status": "Active"},
+    {"house_number": "155", "block": "Block C", "owner_name": "Unni (ഉണ്ണി)", "status": "Active"},
+    {"house_number": "156", "block": "Block C", "owner_name": "Shamnad (ഷംനാദ്)", "status": "Active"},
+    {"house_number": "157", "block": "Block C", "owner_name": "Akhil (അഖിൽ)", "status": "Active"},
+    {"house_number": "158", "block": "Block C", "owner_name": "Sujitha (സുജിത്ത)", "status": "Active"},
+    {"house_number": "159", "block": "Block C", "owner_name": "Vasudevan Nair (വാസുദേവൻ നായർ)", "status": "Active"},
+    {"house_number": "160", "block": "Block C", "owner_name": "Soumi (സൗമി)", "status": "Active"},
+    {"house_number": "161", "block": "Block C", "owner_name": "Kuttan (കുട്ടൻ)", "status": "Active"},
+    {"house_number": "162", "block": "Block C", "owner_name": "Vishakh (വിശാഖ്)", "status": "Active"},
+    {"house_number": "163", "block": "Block C", "owner_name": "Shyama Veedu (ശ്യാമ വീട്)", "status": "Active"},
+    {"house_number": "164", "block": "Block C", "owner_name": "Sudheesh Veedu (സുധീഷ് വീട്)", "status": "Active"},
+    {"house_number": "165", "block": "Block C", "owner_name": "Omana Side (ഓമന side)", "status": "Active"},
+    {"house_number": "166", "block": "Block C", "owner_name": "Kunnumpuram (കുന്നുമ്പുറം)", "status": "Active"},
+    {"house_number": "167", "block": "Block C", "owner_name": "Deepa (ദീപ)", "status": "Active"},
+    {"house_number": "168", "block": "Block C", "owner_name": "Anita Auto Driver (അനിത ഓട്ടോ ഡ്രൈവർ)", "status": "Active"},
+    {"house_number": "169", "block": "Block C", "owner_name": "Anita (അനിത)", "status": "Active"},
+    {"house_number": "170", "block": "Block C", "owner_name": "Anita Opp (അനിത Opp)", "status": "Active"},
 ]
 
 def seed_houses():
     Base.metadata.create_all(bind=engine)
     db = SessionLocal()
     try:
-        print("🌱 Seeding Houses data (102-149) into MySQL...")
+        print("🌱 Seeding Houses data (102-170) into MySQL...")
         count_added = 0
         count_updated = 0
 
