@@ -50,6 +50,12 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 def startup_event():
     try:
         from datetime import datetime
+        with engine.connect() as conn:
+            try:
+                conn.execute(text("ALTER TABLE slides ADD COLUMN tag VARCHAR(100) NULL;"))
+                conn.commit()
+            except Exception:
+                pass
         db = SessionLocal()
         try:
             if db.query(models.Income).count() == 0:
