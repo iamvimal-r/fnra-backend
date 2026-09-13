@@ -45,7 +45,6 @@ def register_house(
 
 @router.get("/houses", response_model=list[schemas.HouseResponse])
 def get_all_houses(
-    current_user: Annotated[models.User, Depends(auth.get_current_user)],
     db: Session = Depends(database.get_db),
 ):
     houses = db.query(models.House).all()

@@ -24,7 +24,7 @@ def seed():
                 name="FNRA Admin",
                 username="admin",
                 email="admin@fnra.org",
-                hashed_password=auth.get_password_hash("AdminPassword123"),
+                hashed_password=auth.get_password_hash(""),
                 role="admin",
                 profile_image=None,
             )
