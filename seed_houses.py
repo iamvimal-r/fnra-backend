@@ -1,5 +1,4 @@
 import os
-
 try:
     from dotenv import load_dotenv
     load_dotenv()
@@ -10,7 +9,6 @@ from app.database import engine, SessionLocal, Base
 from app import models
 
 HOUSES_DATA = [
-    # 100 series (Block C / B)
     {"house_number": "102", "block": "Block C", "owner_name": "Anirudhan Vakeel (അനിരുദ്ധൻ വക്കീൽ)", "status": "Active"},
     {"house_number": "103", "block": "Block C", "owner_name": "Aneesh K.G (അനീഷ് K G)", "status": "Active"},
     {"house_number": "104", "block": "Block C", "owner_name": "Sagar (സാഗർ)", "status": "Active"},
@@ -34,115 +32,30 @@ HOUSES_DATA = [
     {"house_number": "122", "block": "Block C", "owner_name": "Gopakrishnan (ഗോപികൃഷ്ണൻ)", "status": "Active"},
     {"house_number": "123", "block": "Block B", "owner_name": "Vimal (വിമൽ)", "status": "Active"},
     {"house_number": "124", "block": "Block C", "owner_name": "Madhusoodhanan (മധുസൂദനൻ)", "status": "Active"},
-    {"house_number": "125", "block": "Block C", "owner_name": "Jyothi (ജ്യോതി)", "status": "Active"},
-    {"house_number": "126", "block": "Block C", "owner_name": "Vinila (വിനില)", "status": "Active"},
-    {"house_number": "127", "block": "Block C", "owner_name": "Thulasi (തുളസി)", "status": "Active"},
-    {"house_number": "128", "block": "Block C", "owner_name": "Thankamani (തങ്കമണി)", "status": "Active"},
-    {"house_number": "129", "block": "Block C", "owner_name": "Shobha (ശോഭ)", "status": "Active"},
-    {"house_number": "130", "block": "Block C", "owner_name": "Nandakumar (നന്ദകുമാർ)", "status": "Active"},
-    {"house_number": "131", "block": "Block C", "owner_name": "Bijosh (ബിജോഷ്)", "status": "Active"},
-    {"house_number": "132", "block": "Block C", "owner_name": "Reshma (രേഷ്മ)", "status": "Active"},
-    {"house_number": "133", "block": "Block C", "owner_name": "Nithin (നിധിൻ)", "status": "Active"},
-    {"house_number": "134", "block": "Block C", "owner_name": "Gopakrishnan (ഗോപികൃഷ്ണൻ)", "status": "Active"},
-    {"house_number": "135", "block": "Block C", "owner_name": "Balu (ബാലു)", "status": "Active"},
-    {"house_number": "136", "block": "Block C", "owner_name": "KSRTC Wing (KSRTC വിങ്)", "status": "Active"},
-    {"house_number": "137", "block": "Block C", "owner_name": "Shiju (ഷിജു)", "status": "Active"},
-    {"house_number": "138", "block": "Block C", "owner_name": "Vikraman (വിക്രമൻ)", "status": "Active"},
-    {"house_number": "139", "block": "Block C", "owner_name": "Shiny (ഷൈനി)", "status": "Active"},
-    {"house_number": "140", "block": "Block C", "owner_name": "Rented House (വാടക വീട്)", "status": "Active"},
-    {"house_number": "141", "block": "Block C", "owner_name": "Leelamma (ലീലമ്മ)", "status": "Active"},
-    {"house_number": "142", "block": "Block C", "owner_name": "Kumar (കുമാർ)", "status": "Active"},
-    {"house_number": "143", "block": "Block C", "owner_name": "Shiju (ഷിജു)", "status": "Active"},
-    {"house_number": "144", "block": "Block C", "owner_name": "Sheeba (ഷീബ)", "status": "Active"},
-    {"house_number": "145", "block": "Block C", "owner_name": "Shashi Home (ശശി)", "status": "NC"},
-    {"house_number": "146", "block": "Block C", "owner_name": "Sheeja (ഷീജ)", "status": "NC"},
-    {"house_number": "147", "block": "Block C", "owner_name": "Anil A Veedu (അനിൽ A വീട്)", "status": "Active"},
-    {"house_number": "148", "block": "Block C", "owner_name": "Madhu Auto (മധു ഓട്ടോ)", "status": "NC"},
-    {"house_number": "149", "block": "Block C", "owner_name": "Unni Kottaram (ഉണ്ണി കൊട്ടാരം)", "status": "Active"},
-    {"house_number": "150", "block": "Block C", "owner_name": "CRP", "status": "Active"},
-    {"house_number": "151", "block": "Block C", "owner_name": "Anita Veedu (അനിത വീട്)", "status": "Active"},
-    {"house_number": "152", "block": "Block C", "owner_name": "Kamalamma (കമലമ്മ)", "status": "NC"},
-    {"house_number": "153", "block": "Block C", "owner_name": "Binu (ബിനു)", "status": "Active"},
-    {"house_number": "154", "block": "Block C", "owner_name": "Rakesh (രാകേഷ്)", "status": "Active"},
-    {"house_number": "155", "block": "Block C", "owner_name": "Unni (ഉണ്ണി)", "status": "Active"},
-    {"house_number": "156", "block": "Block C", "owner_name": "Shamnad (ഷംനാദ്)", "status": "Active"},
-    {"house_number": "157", "block": "Block C", "owner_name": "Akhil (അഖിൽ)", "status": "Active"},
-    {"house_number": "158", "block": "Block C", "owner_name": "Sujitha (സുജിത്ത)", "status": "Active"},
-    {"house_number": "159", "block": "Block C", "owner_name": "Vasudevan Nair (വാസുദേവൻ നായർ)", "status": "Active"},
-    {"house_number": "160", "block": "Block C", "owner_name": "Soumi (സൗമി)", "status": "Active"},
-    {"house_number": "161", "block": "Block C", "owner_name": "Kuttan (കുട്ടൻ)", "status": "Active"},
-    {"house_number": "162", "block": "Block C", "owner_name": "Vishakh (വിശാഖ്)", "status": "Active"},
-    {"house_number": "163", "block": "Block C", "owner_name": "Shyama Veedu (ശ്യാമ വീട്)", "status": "Active"},
-    {"house_number": "164", "block": "Block C", "owner_name": "Sudheesh Veedu (സുധീഷ് വീട്)", "status": "Active"},
-    {"house_number": "165", "block": "Block C", "owner_name": "Omana Side (ഓമന side)", "status": "Active"},
-    {"house_number": "166", "block": "Block C", "owner_name": "Kunnumpuram (കുന്നുമ്പുറം)", "status": "Active"},
-    {"house_number": "167", "block": "Block C", "owner_name": "Deepa (ദീപ)", "status": "Active"},
-    {"house_number": "168", "block": "Block C", "owner_name": "Anita Auto Driver (അനിത ഓട്ടോ ഡ്രൈവർ)", "status": "Active"},
-    {"house_number": "169", "block": "Block C", "owner_name": "Anita (അനിത)", "status": "Active"},
-    {"house_number": "170", "block": "Block C", "owner_name": "Anita Opp (അനിത Opp)", "status": "Active"},
-
-    # 200 series (Block A)
-    {"house_number": "201", "block": "Block A", "owner_name": "Sarojam (സരോജം)", "status": "Active"},
-    {"house_number": "202", "block": "Block A", "owner_name": "Ammu (അമ്മു)", "status": "Active"},
-    {"house_number": "203", "block": "Block A", "owner_name": "Lakshmi (ലക്ഷ്മി)", "status": "Active"},
-    {"house_number": "204", "block": "Block A", "owner_name": "Monukuttan (മോനുകുട്ടൻ)", "status": "Active"},
-    {"house_number": "205", "block": "Block A", "owner_name": "Dasi Maman (ദാസി മാമൻ)", "status": "Active"},
-    {"house_number": "206", "block": "Block A", "owner_name": "Santhosh (സന്തോഷ്)", "status": "Active"},
-    {"house_number": "207", "block": "Block A", "owner_name": "Lalitha (ലളിത)", "status": "Active"},
-    {"house_number": "208", "block": "Block A", "owner_name": "Anil (അനിൽ)", "status": "Active"},
-    {"house_number": "209", "block": "Block A", "owner_name": "New Home", "status": "Active"},
-    {"house_number": "210", "block": "Block A", "owner_name": "Madhumohanan (മധുമോഹനൻ)", "status": "Active"},
-    {"house_number": "211", "block": "Block A", "owner_name": "Thankappan (തങ്കപ്പൻ)", "status": "Active"},
-    {"house_number": "212", "block": "Block A", "owner_name": "Chandukuttan (ചന്ദുകുട്ടൻ)", "status": "Active"},
-    {"house_number": "213", "block": "Block A", "owner_name": "Gopu (ഗോപു)", "status": "Active"},
-    {"house_number": "214", "block": "Block A", "owner_name": "Saraswathi Bhavan (സരസ്വതി ഭവൻ)", "status": "Active"},
-    {"house_number": "215", "block": "Block A", "owner_name": "Sudhamma (സുധമ്മ)", "status": "Active"},
-    {"house_number": "216", "block": "Block A", "owner_name": "Preman (പ്രേമൻ)", "status": "Active"},
-    {"house_number": "217", "block": "Block A", "owner_name": "Annam (അന്നം)", "status": "Active"},
-    {"house_number": "218", "block": "Block A", "owner_name": "Shibu (ഷിബു)", "status": "Active"},
-    {"house_number": "219", "block": "Block A", "owner_name": "Nalini Teacher (നളിനി ടീച്ചർ)", "status": "Active"},
-    {"house_number": "220", "block": "Block A", "owner_name": "Rajamma Amma (രാജമ്മ അമ്മ)", "status": "Active"},
-    {"house_number": "221", "block": "Block A", "owner_name": "Chinchu (ചിഞ്ചു)", "status": "Active"},
-    {"house_number": "222", "block": "Block A", "owner_name": "Madhu (മധു)", "status": "Active"},
-    {"house_number": "223", "block": "Block A", "owner_name": "Sudheesh (സുധീഷ്)", "status": "Active"},
-    {"house_number": "224", "block": "Block A", "owner_name": "Rajeev (രാജീവ്)", "status": "Active"},
-    {"house_number": "225", "block": "Block A", "owner_name": "Vakeel (വക്കീൽ)", "status": "Active"},
-    {"house_number": "226", "block": "Block A", "owner_name": "Sabu (സാബു)", "status": "Active"},
-    {"house_number": "227", "block": "Block A", "owner_name": "Sabu Next (സാബു Next)", "status": "Active"},
-    {"house_number": "228", "block": "Block A", "owner_name": "Jayanthi Amma (ജയന്തി അമ്മ)", "status": "Active"},
-    {"house_number": "229", "block": "Block A", "owner_name": "Vishakh (വിശാഖ്)", "status": "Active"},
-    {"house_number": "230", "block": "Block A", "owner_name": "Kochukuttan (കൊച്ചുകുട്ടൻ)", "status": "Active"},
-    {"house_number": "231", "block": "Block A", "owner_name": "Sajeev (സജീവ്)", "status": "Active"},
-    {"house_number": "232", "block": "Block A", "owner_name": "Raji (രാജി)", "status": "Active"},
-    {"house_number": "233", "block": "Block A", "owner_name": "Kochukuttan Next Home (കൊച്ചുകുട്ടൻ Next Home)", "status": "Active"},
-    {"house_number": "234", "block": "Block A", "owner_name": "Lenin Vilakam (ലെനിൻ വിളാകം)", "status": "Active"},
-    {"house_number": "235", "block": "Block A", "owner_name": "Suresh (സുരേഷ്)", "status": "Active"},
-    {"house_number": "236", "block": "Block A", "owner_name": "Chandran (ചന്ദ്രൻ)", "status": "Active"},
+    {"house_number": "125", "block": "Block C", "owner_name": "Sarada Amma (ശാരദ അമ്മ)", "status": "Active"},
 ]
 
 def seed_houses():
     Base.metadata.create_all(bind=engine)
     db = SessionLocal()
     try:
-        print("🌱 Seeding Houses data (102-170, 201-236) into MySQL...")
+        print(f"🌱 Seeding {len(HOUSES_DATA)} Houses into MySQL...")
         count_added = 0
         count_updated = 0
 
         for item in HOUSES_DATA:
-            h_num = item["house_number"].strip()
-            existing = db.query(models.House).filter(models.House.house_number == h_num).first()
+            existing = db.query(models.House).filter(models.House.house_number == item["house_number"]).first()
             if existing:
                 existing.owner_name = item["owner_name"]
                 existing.block = item["block"]
-                existing.status = item.get("status", "Active")
                 count_updated += 1
             else:
                 house = models.House(
-                    house_number=h_num,
+                    house_number=item["house_number"],
                     block=item["block"],
                     owner_name=item["owner_name"],
                     family_members=[],
-                    status=item.get("status", "Active")
+                    status="Active"
                 )
                 db.add(house)
                 count_added += 1

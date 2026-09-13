@@ -132,6 +132,7 @@ class FamilyMember(BaseModel):
 
 class HouseCreate(BaseModel):
     house_number: str
+    house_name: Optional[str] = ""
     block: str
     owner_name: str
     status: Optional[str] = "Active"
@@ -140,6 +141,7 @@ class HouseCreate(BaseModel):
 
 class HouseResponse(HouseCreate):
     id: str = Field(alias="_id")
+    house_name: Optional[str] = ""
     association_fee: float = 50.0
     status: str = "Active"
     last_payment_date: Optional[datetime] = None

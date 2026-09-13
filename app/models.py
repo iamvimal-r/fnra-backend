@@ -53,6 +53,7 @@ class House(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     house_number = Column(String(50), unique=True, index=True, nullable=False)
+    house_name = Column(String(255), nullable=True, default="")
     block = Column(String(50), nullable=False)
     owner_name = Column(String(255), nullable=False)
     family_members = Column(JSON, default=list)

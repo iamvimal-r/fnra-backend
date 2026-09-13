@@ -21,6 +21,7 @@ def register_house(
 
     new_house = models.House(
         house_number=house.house_number,
+        house_name=getattr(house, "house_name", "") or "",
         block=house.block,
         owner_name=house.owner_name,
         family_members=[fm.dict() for fm in house.family_members],
@@ -33,6 +34,7 @@ def register_house(
     return {
         "_id": str(new_house.id),
         "house_number": new_house.house_number,
+        "house_name": new_house.house_name or "",
         "block": new_house.block,
         "owner_name": new_house.owner_name,
         "family_members": new_house.family_members or [],
@@ -61,6 +63,7 @@ def get_all_houses(
         result.append({
             "_id": str(h.id),
             "house_number": h.house_number,
+            "house_name": getattr(h, "house_name", "") or "",
             "block": h.block,
             "owner_name": h.owner_name,
             "family_members": h.family_members or [],
@@ -120,6 +123,7 @@ def update_house(
         raise HTTPException(status_code=404, detail="House not found")
 
     existing.house_number = house_data.house_number
+    existing.house_name = getattr(house_data, "house_name", "") or ""
     existing.block = house_data.block
     existing.owner_name = house_data.owner_name
     if house_data.status:

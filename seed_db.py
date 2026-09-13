@@ -50,22 +50,16 @@ def seed():
         # 2. Houses
         if db.query(models.House).count() == 0:
             print("  Seeding Houses...")
-            mock_houses = []
-            for block in ["Block A", "Block B", "Block C", "Block D"]:
-                for num in range(101, 106):
-                    h_num = f"{block[-1]}-{num}"
-                    mock_houses.append(
-                        models.House(
-                            house_number=h_num,
-                            block=block,
-                            owner_name=f"Resident {h_num}",
-                            family_members=[
-                                {"name": f"Family Member 1 ({h_num})", "relation": "Spouse"},
-                                {"name": f"Family Member 2 ({h_num})", "relation": "Child"}
-                            ],
-                            status="Active"
-                        )
-                    )
+            from seed_houses import HOUSES_DATA
+            mock_houses = [
+                models.House(
+                    house_number=item["house_number"],
+                    block=item["block"],
+                    owner_name=item["owner_name"],
+                    family_members=[],
+                    status="Active"
+                ) for item in HOUSES_DATA
+            ]
             db.add_all(mock_houses)
             db.commit()
 
