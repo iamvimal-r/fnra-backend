@@ -72,37 +72,16 @@ def seed():
         # 3. Committee Members
         if db.query(models.CommitteeMember).count() == 0:
             print("  Seeding Committee Members...")
+            from seed_committee import COMMITTEE_MEMBERS
             members = [
                 models.CommitteeMember(
-                    name="K. Ramanathan",
-                    designation="President",
-                    phone="9847012345",
-                    email="president@fnra.org",
-                    photo_url="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300",
-                    bio="Serving FNRA resident community for over 10 years.",
-                    order=1,
+                    name=item["name"],
+                    designation=item["designation"],
+                    photo_url=item["photo_url"],
+                    bio=item["bio"],
+                    order=item["order"],
                     published=True
-                ),
-                models.CommitteeMember(
-                    name="S. Anita Nair",
-                    designation="Secretary",
-                    phone="9847054321",
-                    email="secretary@fnra.org",
-                    photo_url="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=300",
-                    bio="Managing society operations, communications and welfare activities.",
-                    order=2,
-                    published=True
-                ),
-                models.CommitteeMember(
-                    name="M. Vijayakumar",
-                    designation="Treasurer",
-                    phone="9847098765",
-                    email="treasurer@fnra.org",
-                    photo_url="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300",
-                    bio="Overseeing association finances, budgeting, and monthly fee collections.",
-                    order=3,
-                    published=True
-                ),
+                ) for item in COMMITTEE_MEMBERS
             ]
             db.add_all(members)
             db.commit()
