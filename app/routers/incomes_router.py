@@ -70,8 +70,9 @@ def get_incomes_summary(
     current_user: Annotated[models.User, Depends(auth.get_current_user)],
     db: Session = Depends(database.get_db)
 ):
-    """Fetch income totals and categories summary breakdown."""
+    """Fetch income totals and categories summary breakdown including House Monthly Fees."""
     incomes = db.query(models.Income).all()
+    paid_rents = db.query(models.MonthlyRent).filter(models.MonthlyRent.status == "Paid").all()
     
     total = 0.0
     by_category = {}
@@ -81,12 +82,18 @@ def get_incomes_summary(
         total += amt
         cat = inc.category or "Other"
         by_category[cat] = by_category.get(cat, 0.0) + amt
+
+    rent_total = sum(float(r.amount or 0.0) for r in paid_rents)
+    if rent_total > 0:
+        total += rent_total
+        by_category["House Monthly Fee"] = by_category.get("House Monthly Fee", 0.0) + rent_total
         
     category_summary = [{"category": k, "amount": v} for k, v in by_category.items()]
     
     return {
         "total_amount": total,
-        "by_category": category_summary
+        "by_category": category_summary,
+        "house_payments_total": rent_total
     }
 
 

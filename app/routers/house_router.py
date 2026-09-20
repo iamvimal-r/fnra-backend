@@ -213,6 +213,31 @@ def get_rent_summary(
     }
 
 
+@router.get("/houses/rent/tbk")
+def get_monthly_rents_tbk(
+    current_user: Annotated[models.User, Depends(auth.get_current_user)],
+    db: Session = Depends(database.get_db),
+):
+    tbk_records = db.query(models.MonthlyRentTBK).order_by(models.MonthlyRentTBK.posted_date.desc()).limit(200).all()
+    return [
+        {
+            "id": r.id,
+            "rent_id": r.rent_id,
+            "house_id": r.house_id,
+            "house_number": r.house_number,
+            "month": r.month,
+            "year": r.year,
+            "amount": r.amount,
+            "status": r.status,
+            "payment_date": r.payment_date,
+            "operation": r.operation,
+            "posted_by": r.posted_by,
+            "posted_date": r.posted_date,
+        }
+        for r in tbk_records
+    ]
+
+
 @router.post("/houses/{house_id}/rent", response_model=schemas.MonthlyRentResponse)
 def add_house_rent(
     house_id: str,
@@ -228,18 +253,35 @@ def add_house_rent(
 
     house_number = house.house_number if house else ""
 
-    r = models.MonthlyRent(
-        house_id=house_id,
-        house_number=house_number,
-        month=rent.month,
-        year=rent.year,
-        amount=rent.amount,
-        status=rent.status,
-        payment_date=datetime.utcnow(),
-    )
-    db.add(r)
-    db.commit()
-    db.refresh(r)
+    # Check if a rent record for this house_id, month, and year already exists
+    existing_rent = db.query(models.MonthlyRent).filter(
+        models.MonthlyRent.house_id == house_id,
+        models.MonthlyRent.month == rent.month,
+        models.MonthlyRent.year == rent.year
+    ).first()
+
+    if existing_rent:
+        existing_rent.amount = rent.amount
+        existing_rent.status = rent.status
+        existing_rent.payment_date = datetime.utcnow()
+        if house_number and not existing_rent.house_number:
+            existing_rent.house_number = house_number
+        db.commit()
+        db.refresh(existing_rent)
+        r = existing_rent
+    else:
+        r = models.MonthlyRent(
+            house_id=house_id,
+            house_number=house_number,
+            month=rent.month,
+            year=rent.year,
+            amount=rent.amount,
+            status=rent.status,
+            payment_date=datetime.utcnow(),
+        )
+        db.add(r)
+        db.commit()
+        db.refresh(r)
 
     return {
         "_id": str(r.id),

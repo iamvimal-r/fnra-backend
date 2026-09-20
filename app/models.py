@@ -99,6 +99,23 @@ class MonthlyRent(Base):
     payment_date = Column(DateTime, default=datetime.utcnow)
 
 
+class MonthlyRentTBK(Base):
+    __tablename__ = "monthly_rents_tbk"
+
+    id = Column(Integer, primary_key=True, index=True)
+    rent_id = Column(Integer, nullable=True)
+    house_id = Column(String(255), nullable=True)
+    house_number = Column(String(50), nullable=True)
+    month = Column(String(50), nullable=True)
+    year = Column(Integer, nullable=True)
+    amount = Column(Float, nullable=True)
+    status = Column(String(50), nullable=True)
+    payment_date = Column(DateTime, nullable=True)
+    operation = Column(String(20), nullable=False)  # 'INSERT', 'UPDATE', 'DELETE'
+    posted_by = Column(String(255), default="system")
+    posted_date = Column(DateTime, default=datetime.utcnow)
+
+
 class MOM(Base):
     __tablename__ = "moms"
 

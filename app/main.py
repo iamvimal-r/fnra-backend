@@ -56,6 +56,76 @@ def startup_event():
                 conn.commit()
             except Exception:
                 pass
+
+            # Create monthly_rents_tbk audit table if not exists
+            try:
+                conn.execute(text("""
+                    CREATE TABLE IF NOT EXISTS monthly_rents_tbk (
+                        id INT AUTO_INCREMENT PRIMARY KEY,
+                        rent_id INT NULL,
+                        house_id VARCHAR(255) NULL,
+                        house_number VARCHAR(50) NULL,
+                        month VARCHAR(50) NULL,
+                        year INT NULL,
+                        amount DOUBLE NULL,
+                        status VARCHAR(50) NULL,
+                        payment_date DATETIME NULL,
+                        operation VARCHAR(20) NOT NULL,
+                        posted_by VARCHAR(255) DEFAULT 'system',
+                        posted_date DATETIME DEFAULT CURRENT_TIMESTAMP
+                    );
+                """))
+                conn.commit()
+            except Exception as ex:
+                logger.error(f"Error creating monthly_rents_tbk table: {ex}")
+
+            # Create AFTER INSERT trigger
+            try:
+                conn.execute(text("DROP TRIGGER IF EXISTS trg_monthly_rents_after_insert;"))
+                conn.execute(text("""
+                    CREATE TRIGGER trg_monthly_rents_after_insert
+                    AFTER INSERT ON monthly_rents
+                    FOR EACH ROW
+                    BEGIN
+                        INSERT INTO monthly_rents_tbk (rent_id, house_id, house_number, month, year, amount, status, payment_date, operation, posted_by, posted_date)
+                        VALUES (NEW.id, NEW.house_id, NEW.house_number, NEW.month, NEW.year, NEW.amount, NEW.status, NEW.payment_date, 'INSERT', 'system', NOW());
+                    END;
+                """))
+                conn.commit()
+            except Exception as ex:
+                logger.error(f"Error creating insert trigger: {ex}")
+
+            # Create AFTER UPDATE trigger
+            try:
+                conn.execute(text("DROP TRIGGER IF EXISTS trg_monthly_rents_after_update;"))
+                conn.execute(text("""
+                    CREATE TRIGGER trg_monthly_rents_after_update
+                    AFTER UPDATE ON monthly_rents
+                    FOR EACH ROW
+                    BEGIN
+                        INSERT INTO monthly_rents_tbk (rent_id, house_id, house_number, month, year, amount, status, payment_date, operation, posted_by, posted_date)
+                        VALUES (NEW.id, NEW.house_id, NEW.house_number, NEW.month, NEW.year, NEW.amount, NEW.status, NEW.payment_date, 'UPDATE', 'system', NOW());
+                    END;
+                """))
+                conn.commit()
+            except Exception as ex:
+                logger.error(f"Error creating update trigger: {ex}")
+
+            # Create AFTER DELETE trigger
+            try:
+                conn.execute(text("DROP TRIGGER IF EXISTS trg_monthly_rents_after_delete;"))
+                conn.execute(text("""
+                    CREATE TRIGGER trg_monthly_rents_after_delete
+                    AFTER DELETE ON monthly_rents
+                    FOR EACH ROW
+                    BEGIN
+                        INSERT INTO monthly_rents_tbk (rent_id, house_id, house_number, month, year, amount, status, payment_date, operation, posted_by, posted_date)
+                        VALUES (OLD.id, OLD.house_id, OLD.house_number, OLD.month, OLD.year, OLD.amount, OLD.status, OLD.payment_date, 'DELETE', 'system', NOW());
+                    END;
+                """))
+                conn.commit()
+            except Exception as ex:
+                logger.error(f"Error creating delete trigger: {ex}")
         db = SessionLocal()
         try:
             if db.query(models.Income).count() == 0:
